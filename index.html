@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identidade do Animal</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        img {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #007bff;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            a {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Informações do Animal</h1>
+        <img src="Fred.jpg" alt="Foto do Animal">
+        <p><strong>Nome:</strong> Frederico</p>
+        <p><strong>Raça:</strong> Poodle</p>
+        <p><strong>Idade:</strong> <span id="idade"></span></p>
+        <a href="https://wa.me/5531985421817?text=Olá,%20encontrei%20seu%20animal!" target="_blank">Contatar via WhatsApp</a>
+    </div>
+
+    <script>
+        // Função para calcular a idade em anos e meses
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+
+            let anos = hoje.getFullYear() - nascimento.getFullYear();
+            let meses = hoje.getMonth() - nascimento.getMonth();
+
+            // Ajusta anos e meses se o aniversário ainda não ocorreu este ano
+            if (meses < 0 || (meses === 0 && hoje.getDate() < nascimento.getDate())) {
+                anos--;
+                meses += 12; // Adiciona 12 meses para corrigir o cálculo
+            }
+
+            // Formata a idade como "X anos e Y meses"
+            if (anos === 0) {
+                return `${meses} ${meses === 1 ? "mês" : "meses"}`;
+            } else if (meses === 0) {
+                return `${anos} ${anos === 1 ? "ano" : "anos"}`;
+            } else {
+                return `${anos} ${anos === 1 ? "ano" : "anos"} e ${meses} ${meses === 1 ? "mês" : "meses"}`;
+            }
+        }
+
+        // Data de nascimento do animal (formato: AAAA-MM-DD)
+        const dataNascimento = "2023-03-25";
+
+        // Exibe a idade no elemento com id "idade"
+        document.getElementById("idade").textContent = calcularIdade(dataNascimento);
+
+        // Captura a localização do usuário
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Usa o EmailJS para enviar a localização
+                emailjs.send("service_r37439o", "template_4b4pa4u", {
+                    latitude: latitude,
+                    longitude: longitude,
+                    message: `Localização do animal: https://www.google.com/maps?q=${latitude},${longitude}`
+                })
+                .then(function(response) {
+                    console.log("E-mail enviado com sucesso!", response);
+                }, function(error) {
+                    console.error("Erro ao enviar e-mail:", error);
+                });
+            }, handleLocationError);
+        } else {
+            alert("Geolocalização não é suportada pelo seu navegador.");
+        }
+
+        // Função para tratar erros de geolocalização
+        function handleLocationError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Permissão para acessar a localização foi negada.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Localização indisponível.");
+                    break;
+                case error.TIMEOUT:
+                    alert("Tempo de solicitação de localização expirado.");
+                    break;
+                default:
+                    alert("Erro desconhecido ao obter localização.");
+                    break;
+            }
+        }
+    </script>
+
+    <!-- Inclua o EmailJS SDK -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "8Fky2ZkjVmLisBTgY",
+            });
+        })();
+    </script>
+</body>
+</html>
