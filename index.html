@@ -96,6 +96,11 @@
         <p><strong>Nome:</strong> Frederico</p>
         <p><strong>Raça:</strong> Poodle</p>
         <p><strong>Idade:</strong> <span id="idade"></span></p>
+        
+        <p style="color: red; font-weight: bold;">
+            ⚠️ Este animal é <strong>microchipado</strong> e possui localização registrada.
+        </p>
+        
         <a href="https://wa.me/5531985421817?text=Olá,%20encontrei%20seu%20animal!" target="_blank">Contatar via WhatsApp</a>
     </div>
 
@@ -108,13 +113,11 @@
             let anos = hoje.getFullYear() - nascimento.getFullYear();
             let meses = hoje.getMonth() - nascimento.getMonth();
 
-            // Ajusta anos e meses se o aniversário ainda não ocorreu este ano
             if (meses < 0 || (meses === 0 && hoje.getDate() < nascimento.getDate())) {
                 anos--;
-                meses += 12; // Adiciona 12 meses para corrigir o cálculo
+                meses += 12;
             }
 
-            // Formata a idade como "X anos e Y meses"
             if (anos === 0) {
                 return `${meses} ${meses === 1 ? "mês" : "meses"}`;
             } else if (meses === 0) {
@@ -124,19 +127,14 @@
             }
         }
 
-        // Data de nascimento do animal (formato: AAAA-MM-DD)
         const dataNascimento = "2023-03-25";
-
-        // Exibe a idade no elemento com id "idade"
         document.getElementById("idade").textContent = calcularIdade(dataNascimento);
 
-        // Captura a localização do usuário
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
-                // Usa o EmailJS para enviar a localização
                 emailjs.send("service_r37439o", "template_4b4pa4u", {
                     latitude: latitude,
                     longitude: longitude,
@@ -152,7 +150,6 @@
             alert("Geolocalização não é suportada pelo seu navegador.");
         }
 
-        // Função para tratar erros de geolocalização
         function handleLocationError(error) {
             switch (error.code) {
                 case error.PERMISSION_DENIED:
@@ -171,7 +168,6 @@
         }
     </script>
 
-    <!-- Inclua o EmailJS SDK -->
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
